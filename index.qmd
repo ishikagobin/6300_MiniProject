@@ -1,0 +1,22 @@
+---
+format:
+  html:
+    embed-resources: true
+---
+
+![](images/thanksgiving-travel-airport-flying-2025.png)
+
+## Project Objective
+
+This project examines U.S. airline performance during November 2023, using data from the Bureau of Transportation Statistics.
+The goal is to evaluate how airlines and airports operated during the start of the busy holiday travel season—focusing on delays, cancellations, and day-to-day flight behavior.
+
+## Key Questions
+
+1. Which airlines and airports demonstrated the strongest reliability?
+2. Where did delays or cancellations cluster, and which carriers were most affected?
+3. How did broader operational patterns such as weekday demand or holiday travel surges—shape overall performance?
+
+## Author 
+
+Ishika is a first-year Master’s student in Data Science and Analytics at Georgetown University. This project, completed for DSAN 6300 (Database Systems and SQL), analyzes U.S. airline performance during November 2023 using SQL-generated datasets from the Bureau of Transportation Statistics. All analysis was conducted in Python and presented through a Quarto website, with a narrative storyline designed to highlight key findings and insights. Her academic interests include data visualization, transportation analytics, and storytelling with data.
