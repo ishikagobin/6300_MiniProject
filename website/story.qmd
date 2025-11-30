@@ -1,0 +1,178 @@
+---
+title: "Airline Performance in the United States of America: November 2023"
+format:
+  html:
+    toc: true
+---
+
+# 1. Why This Analysis Matters
+
+Air travel reliability is shaped by many interconnected forces: airline operations, airport congestion, staffing levels, seasonal demand patterns, and even weather.  
+This project examines U.S. airline performance during **November 2023**, a month marked by heavy travel activity around Thanksgiving. The analysis aims to understand how well the aviation system functioned under this pressure.
+
+The goals of this exploration are to uncover:
+
+- Which airlines and airports are most prone to delays  
+- Where early departures occur and why they matter  
+- How flight volume varies throughout the week  
+- What drives cancellations across airports  
+- How operational patterns evolve over the month  
+
+Together, these insights help illuminate **how and why flight reliability fluctuates**, revealing operational weaknesses and seasonal stress points across the U.S. air transportation system.
+
+---
+
+# 2. Airline Reliability: Which Carriers Struggle Most?
+
+## 2.1 Maximum Departure Delay by Airline
+
+![](images/Problem%201.png)
+
+American Airlines experienced an extreme maximum delay of roughly **3,518 minutes (~58 hours)**, whereas Southwest Airlines recorded the **lowest maximum** delay at about **652 minutes**.
+
+This contrast highlights an important operational difference:
+
+Low-cost and regional carriers generally have **tighter turnaround schedules and less buffer capacity**, which means long delays are far more expensive for them. Every extra minute at the gate can disrupt their entire daily route structure, so they tend to avoid prolonged delays more aggressively.
+
+Large legacy carriers like American Airlines, however, operate complex hub-and-spoke networks. When irregular operations occur (maintenance issues, missed crew connections, aircraft swaps), the ripple effects can accumulate and lead to much **longer individual delays**, even if such events are rare.
+
+---
+
+## 2.2 Maximum Early Departures
+
+Early departures may seem harmless, but leaving too early can disrupt passenger connections and scheduling coordination. Comparing the worst early departures gives a sense of how strictly airlines adhere to scheduled departures.
+
+![](images/Problem%202.png)
+
+SkyWest shows the largest early departure at around **72 minutes early**.  
+Early departures tend to cluster among **regional and commuter airlines**, which often operate tight schedules designed around larger hub connections.
+
+Regional carriers sometimes push departures early to maintain tight network timing, especially when feeding into major airline hubs. However, excessive earliness can inconvenience passengers arriving at the gate on time.
+
+---
+
+# 3. System Demand: When Are Americans Flying Most In November?
+
+Understanding *when* people fly helps explain the broader context behind delays and cancellations. Some days experience more operational stress than others simply due to volume.
+
+![](images/Problem%203.png)
+![](images/Problem%203-scatterplot.png)
+
+We infer that: 
+
+- **Wednesday** is the busiest day of the week (93,769 flights).  
+- **Thursday** closely follows.  
+- **Saturday** has the lowest flight volume.
+
+Wednesday's peak aligns with **Thanksgiving travel**, as many people fly out the day before the holiday. The slight drop on Saturday reflects lower business travel and fewer leisure departures.
+
+---
+
+# 4. Where Do Delays Happen? 
+
+## 4.1 Worst Airport Overall 
+
+Some airports create more delay risk than others. The KPI below highlights the single worst-performing airport in November 2023.
+
+![](images/Problem%204.png)
+
+Concord Padgett Regional shows an average departure delay of **74.19 minutes** — significantly higher than most airports.
+Smaller regional airports may lack robust staffing, runway capacity, or scheduling flexibility, contributing disproportionately to delays.
+
+---
+
+## 4.2 Worst Airport for Each Airline 
+
+After identifying the airlines with the highest average delays, we then examined where those delays occur. Each airline has a unique “worst airport,” meaning the location where it experiences the highest average departure delay.
+These airports are not necessarily major hubs — many are mid-sized airports with limited infrastructure or seasonal congestion, which can create bottlenecks felt across several airlines.
+
+![](images/Problem%205a.png)
+![](images/Problem%205b.png)
+
+Common high-delay locations include:
+
+- Palm Springs International — Handles a large surge of seasonal traffic despite limited runway and gate capacity. Surrounded by mountains, the airport has restricted approach paths, and strong desert crosswinds frequently disrupt operations. These factors cause delays to pile up quickly.
+- Gainesville Regional — Has limited ground crew and gate availability, so even a single operational delay can cascade. As the primary airport for the University of Florida, Thanksgiving break creates a major travel spike that further strains capacity.
+- Rick Husband Amarillo International — Located in the Great Plains where strong winds and low visibility are common. The airport also serves regional carriers with tight turnaround schedules, so delays on inbound flights often roll into outbound departures.
+- Juneau International — One of the most challenging airports in the U.S. due to mountainous terrain and complex approach routes. Winter weather in Alaska like fog, snowfall, and high winds is highly unpredictable in November, making delays almost inevitable.
+
+Interestingly, the airports with the highest delays for multiple airlines are not major hubs, but medium-sized or regional airports. These locations share common characteristics: challenging weather, limited infrastructure, or seasonal congestion. Together, these factors make them highly vulnerable to operational disruptions.
+
+---
+
+# 5. Cancellations: Volume and Causes 
+
+## 5.1 Total Cancellations 
+
+![](images/Problem%206%20KPI.png)
+
+The dataset confirms **819 canceled flights** during November.
+
+---
+
+## 5.2 Why Do Airports Cancel Flights? Most Frequent Reasons 
+
+![](images/Problem%206%20pie%20chart.png)
+
+Breakdown:
+
+- **~72% caused by Carrier**
+- **~27% caused by Weather**
+- **<1% caused by NAS (Air Traffic System)**
+
+This means that most cancellations stemmed from **airline-controlled factors** such as maintenance issues, staffing shortages, and aircraft routing problems.
+
+### Top 20 Airports by Cancellation Reason
+
+![](images/Problem%206%20bar%20chart.png)
+
+Airports with the highest cancellations include:
+
+- McCarran International  
+- Daniel K. Inouye International  
+- Orlando International  
+
+These airports are major leisure destinations or are located in regions prone to seasonal weather issues.
+
+Carrier-related cancellations dominate the system. Weather plays a role but is not the main driver in November. This directly answers our question about which disruptions are within airline control versus external weather or air-traffic constraints.
+
+---
+
+# 6. Daily Flight Trends & Seasonal Effects 
+
+To understand how overall system demand shapes flight reliability, we look at day-to-day flight volume and its rolling 3-day trend.
+
+![](images/Problem%207.png)
+
+The time-series plot shows that **daily flights remain fairly stable around 18,000–20,000 flights**, but there are two major disruptions tied to the Thanksgiving holiday:
+
+- **A sharp decline on Thanksgiving Day (Nov 23)**, dropping to just **11,417 flights**, the lowest in the month. This makes sense—most travelers are already at their destinations, and airlines reduce schedules on the holiday itself.
+- **A rapid surge the following weekend**, with **Nov 25–26 showing the highest flight counts**, as people return home after the holiday. This spike aligns with heavy post-Thanksgiving travel demand.
+
+Together, these patterns highlight how holiday travel drives predictable demand swings, which in turn affect delays and cancellations. When traffic dips sharply, airlines face less congestion, but when demand surges immediately afterward, the system becomes more strained—supporting many of the earlier findings about increased operational pressure.
+
+---
+
+# 7. Story Summary
+
+The November 2023 aviation landscape shows a system under seasonal strain, marked by both predictable patterns and significant operational challenges.
+
+### Key Findings
+
+1. **Airlines differ sharply in their worst-case performance.**  
+   American Airlines faced major operational breakdowns, while Southwest kept extreme delays comparatively low.
+
+2. **Regional carriers frequently depart early**, showing pressure to maintain tight schedules connecting into larger hubs.
+
+3. **Flight demand peaks mid-week**, especially around the Thanksgiving holiday travel period.
+
+4. **Delays cluster at specific airports**, many of which are mid-sized regional airports rather than major hubs.
+
+5. **Most cancellations stem from airline-controlled issues** rather than weather.
+
+6. **Daily flight patterns reveal clear seasonal effects**, with travel surges and troughs that align with holiday behavior.
+
+### Overall Conclusion
+
+Air travel reliability in November 2023 was shaped more by **airline operations** and **airport-specific constraints** than by weather disruption. The system’s performance reflects the predictable pressures of holiday travel, exposing areas where operational improvements could significantly reduce delays and cancellations in future peak periods.
+
