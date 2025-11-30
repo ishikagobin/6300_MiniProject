@@ -7,5 +7,14 @@
   },
   "visualizations.ipynb": {
     "visualizations.html": "8270e31b"
+  },
+  "website/index.qmd": {
+    "index.html": "e6fffd86"
+  },
+  "website/story.qmd": {
+    "story.html": "cb448e69"
+  },
+  "visualizations/visualizations.ipynb": {
+    "visualizations.html": "51bfb4df"
   }
 }

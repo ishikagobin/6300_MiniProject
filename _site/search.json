@@ -56,6 +56,132 @@
     "text": "Question 7\nBuild a report that for each day output average number of flights over the preceding 3 days.\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\ndf = pd.read_csv(\"/Users/ishika/Desktop/MS/DSAN 6300/Mini Project/MiniProject/miniproject_ig294_problem7.csv\")\n\nplt.figure(figsize=(14,6))\n\n# Plot total flights\nplt.plot(df[\"FlightDate\"], df[\"Flights_Per_Day\"], \n         label=\"Flights Per Day\", marker=\"o\")\n\n# Plot rolling average (dashed orange)\nplt.plot(df[\"FlightDate\"], df[\"Avg_Flights_Preceding_3_Days\"], \n         label=\"3-Day Rolling Average\", marker=\"o\",\n         linewidth=3, linestyle=\"--\", color=\"orange\")\n\nplt.title(\"Daily Flights and 3-Day Rolling Average\", fontsize=16)\nplt.xlabel(\"Flight Date\", fontsize=16)\nplt.ylabel(\"Number of Flights\",fontsize=16)\n\n# Show every 5th tick on the x-axis\nplt.xticks(df[\"FlightDate\"][::5], rotation=45)\n\n\n# Max flights\nmax_idx = df[\"Flights_Per_Day\"].idxmax()\nplt.annotate(\n    f\"Max flights: {df['Flights_Per_Day'][max_idx]}\\n Occurred on a Sunday\",\n    xy=(df[\"FlightDate\"][max_idx], df[\"Flights_Per_Day\"][max_idx]),\n    xytext=(df[\"FlightDate\"][max_idx], df[\"Flights_Per_Day\"][max_idx] + 1500),\n    arrowprops=dict(arrowstyle=\"-&gt;\")\n)\n\n# Min flights\nmin_idx = df[\"Flights_Per_Day\"].idxmin()\nplt.annotate(\n    f\"Min flights: {df['Flights_Per_Day'][min_idx]}\\n Occurred on a Thursday\",\n    xy=(df[\"FlightDate\"][min_idx], df[\"Flights_Per_Day\"][min_idx]),\n    xytext=(df[\"FlightDate\"][min_idx], df[\"Flights_Per_Day\"][min_idx] + 2500),\n    arrowprops=dict(arrowstyle=\"-&gt;\")\n)\n\n\nplt.legend()\nplt.grid(True)\nplt.tight_layout()\nplt.savefig(\"Problem 7\")\nplt.show()"
   },
   {
+    "objectID": "visualizations/visualizations.html",
+    "href": "visualizations/visualizations.html",
+    "title": "DSAN 6300 Mini Project Visualizations",
+    "section": "",
+    "text": "Investigate U.S. airline performance during November 2023, using data from the Bureau of Transportation Statistics, to better understand operational efficiency, reliability, and patterns influencing delays and cancellations."
+  },
+  {
+    "objectID": "visualizations/visualizations.html#question-1",
+    "href": "visualizations/visualizations.html#question-1",
+    "title": "DSAN 6300 Mini Project Visualizations",
+    "section": "Question 1",
+    "text": "Question 1\nFind maximal departure delay in minutes for each airline. Sort results from smallest to largest maximum delay. Output airline names and values of the delay.\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load data\ndf = pd.read_csv(\"miniproject_ig294_problem1.csv\")\n\n# Sort from smallest to largest maximum delay\ndf = df.sort_values(\"Maximum_Delay\")\n\n# Identify smallest & largest airlines\nmin_airline = df.iloc[0][\"Airline_Name\"]\nmax_airline = df.iloc[-1][\"Airline_Name\"]\n\ncolors = []\nfor airline in df[\"Airline_Name\"]:\n    if airline == min_airline:\n        colors.append(\"green\")   # smallest delay highlight\n    elif airline == max_airline:\n        colors.append(\"red\")     # largest delay highlight\n    else:\n        colors.append(\"lightgray\")\n\nplt.figure(figsize=(12, 8))\nbars = plt.barh(df[\"Airline_Name\"], df[\"Maximum_Delay\"], color=colors)\n\n# Add plain numeric labels (no \"min\")\nfor bar in bars:\n    width = bar.get_width()\n    plt.text(width + 10, bar.get_y() + bar.get_height()/2,\n             f\"{int(width)}\", va=\"center\", fontsize=9)\n\nplt.xlabel(\"Maximum Delay (minutes)\")\nplt.ylabel(\"Airline\")\nplt.title(\"Maximum Departure Delay by Airline\")\nplt.tight_layout()\nplt.savefig(\"Problem 1.png\")\nplt.show()"
+  },
+  {
+    "objectID": "visualizations/visualizations.html#question-2",
+    "href": "visualizations/visualizations.html#question-2",
+    "title": "DSAN 6300 Mini Project Visualizations",
+    "section": "Question 2",
+    "text": "Question 2\nFind maximal early departures in minutes for each airline. Sort results from largest to smallest. Output airline names.\n\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\ndf = pd.read_csv(\"/Users/ishika/Desktop/MS/DSAN 6300/Mini Project/MiniProject/miniproject_ig294_problem2.csv\")\ndf_sorted = df.sort_values(by=\"Max_Early_Departure\", ascending=False)\n\nplt.figure(figsize=(12, 8))\nbars = plt.barh(df_sorted['Airline_Name'], df_sorted['Max_Early_Departure'], \n                color='skyblue')\n\nplt.gca().invert_yaxis()\n\nfor i, (value, airline) in enumerate(zip(df_sorted['Max_Early_Departure'], \n                                         df_sorted['Airline_Name'])):\n    plt.text(value + 1, i, str(value), va='center')  # &lt;-- SMALL OFFSET (1)\n\nplt.xlabel(\"Maximum Early Departure (minutes)\")\nplt.title(\"Maximum Early Departure by Airline\")\nplt.tight_layout()\nplt.savefig(\"Problem 2.png\")\nplt.show()"
+  },
+  {
+    "objectID": "visualizations/visualizations.html#question-3",
+    "href": "visualizations/visualizations.html#question-3",
+    "title": "DSAN 6300 Mini Project Visualizations",
+    "section": "Question 3",
+    "text": "Question 3\nRank days of the week by the number of flights performed by all airlines on that day (1 is the busiest). Output the day of the week names, number of flights and ranks in the rank increasing order\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load data\ndf = pd.read_csv('/Users/ishika/Desktop/MS/DSAN 6300/Mini Project/MiniProject/miniproject_ig294_problem3.csv')\n\n# Ensure ordered by rank\ndf = df.sort_values('Day_Rank')\n\nplt.figure(figsize=(12, 6))\nbars = plt.barh(df['Day_Name'], df['Total_Flights'], color='skyblue')\n\n# Add labels\nfor bar, value, rank in zip(bars, df['Total_Flights'], df['Day_Rank']):\n    plt.text(bar.get_width() + 20,      # small offset to the right\n             bar.get_y() + bar.get_height() / 2,\n             f'{value}',\n             va='center')\n\nplt.xlabel('Number of Flights')\nplt.ylabel('Day')\nplt.title('Number of flights by day of the week',fontsize=16)\nplt.gca().invert_yaxis()  # highest rank at top\nplt.tight_layout()\nplt.savefig(\"Problem 3.png\")\nplt.show()\n\n\n\n\n\n\n\n\n\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\n# Load CSV data\ndf = pd.read_csv(\"/Users/ishika/Desktop/MS/DSAN 6300/Mini Project/MiniProject/miniproject_ig294_problem3.csv\")\n\n# Reorder Day_Name from Monday to Sunday\nday_order = [\"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\", \"Sunday\"]\ndf[\"Day_Name\"] = pd.Categorical(df[\"Day_Name\"], categories=day_order, ordered=True)\ndf = df.sort_values(\"Day_Name\")\n\n\n# 1. Line plot with markers\nplt.figure(figsize=(10,5))\nsns.lineplot(\n    x=\"Day_Name\",\n    y=\"Total_Flights\",\n    data=df,\n    marker=\"o\",\n    markersize=10,\n    linewidth=2,\n    color=\"royalblue\"\n)\n\n# Annotate points\nfor i, row in df.iterrows():\n    plt.text(row[\"Day_Name\"], row[\"Total_Flights\"] + 1000, \n             f'{row[\"Total_Flights\"]}', \n             ha='center', va='bottom', fontsize=10)\n\nplt.title(\"Number of Flights by Day of the Week\", fontsize=16)\nplt.title(\"Number of Flights by Day of the Week\", fontsize=16, pad=25)\nplt.xlabel(\"Day of the Week\")\nplt.ylabel(\"Number of Flights\")\nplt.grid(False)\nplt.tight_layout()\nplt.savefig(\"Problem 3-scatterplot.png\")\nplt.show()"
+  },
+  {
+    "objectID": "visualizations/visualizations.html#question-4",
+    "href": "visualizations/visualizations.html#question-4",
+    "title": "DSAN 6300 Mini Project Visualizations",
+    "section": "Question 4",
+    "text": "Question 4\nFind the airport that has the highest average departure delay among all airports. Consider 0 minutes delay for flights that departed early. Output one line of results: the airport name, code, and average delay\n\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\ndf = pd.read_csv(\"/Users/ishika/Desktop/MS/DSAN 6300/Mini Project/MiniProject/miniproject_ig294_problem4.csv\")\n\ndf['airport_name_modif'] = df['airport_name'].apply(lambda x: x.split(':')[-1].strip())\n\nairport = df.loc[0, \"airport_name_modif\"]\ncode = df.loc[0, \"airport_code\"]\ndelay = df.loc[0, \"average_departure_delay\"]\n\nplt.figure(figsize=(8, 4))\nplt.axis('off')\n\n# KPI card background\nplt.gca().set_facecolor(\"#f7f7f7\")\nplt.gcf().patch.set_facecolor(\"#f7f7f7\")\n\n# Title\nplt.text(0.5, 0.8, \"Airport with the Highest Average Departure delay\", \n         ha='center', va='center', fontsize=18, fontweight='bold')\n\n# Airport name\nplt.text(0.5, 0.58, f\"{airport} ({code})\",\n         ha='center', va='center', fontsize=14)\n\n# KPI Metric\nplt.text(0.5, 0.35, f\"{delay:.2f} minutes\",\n         ha='center', va='center', fontsize=32, color=\"red\", fontweight=\"bold\")\n\n# # Label\n# plt.text(0.5, 0.17, \"Average Departure Delay\", \n#          ha='center', va='center', fontsize=12)\n\nplt.tight_layout()\nplt.savefig(\"Problem 4.png\")\nplt.show()\n\n\nimport pandas as p"
+  },
+  {
+    "objectID": "visualizations/visualizations.html#question-5",
+    "href": "visualizations/visualizations.html#question-5",
+    "title": "DSAN 6300 Mini Project Visualizations",
+    "section": "Question 5",
+    "text": "Question 5\nFor each airline find an airport where it has the highest average departure delay. Output an airline name, a name of the airport that has the highest average delay, and the value of that average delay.\n\n\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load your CSV\ndf = pd.read_csv(\"/Users/ishika/Desktop/MS/DSAN 6300/Mini Project/MiniProject/miniproject_ig294_problem5.csv\")\n# Columns expected: Airline_Name, Airport_Name, Average_Departure_Delay\n\n# -------------------------------\n# PLOT 1 — Average Delay by Airline\n# -------------------------------\n\nairline_delay = (\n    df.groupby(\"Airline_Name\")[\"Average_Departure_Delay\"]\n    .mean()\n    .sort_values()\n)\n\nplt.figure(figsize=(14, 8))\nplt.barh(airline_delay.index, airline_delay.values, color=\"skyblue\")\nplt.title(\"Average Departure Delay by Airline\", fontsize=16)\nplt.xlabel(\"Avg Departure Delay (minutes)\",fontsize=16)\nplt.ylabel(\"Airline\",fontsize=16)\nplt.tight_layout()\nplt.savefig(\"Problem 5a.png\")\nplt.show()\n\n# -------------------------------\n# PLOT 2 — Average Delay by Airport\n# -------------------------------\n\nairport_delay = (\n    df.groupby(\"Airport_Name\")[\"Average_Departure_Delay\"]\n    .mean()\n    .sort_values()\n)\n\nplt.figure(figsize=(14, 10))\nplt.barh(airport_delay.index, airport_delay.values, color=\"salmon\")\nplt.title(\"Average Departure Delay by Airport (Worst Airport for Each Airline)\", fontsize=16)\nplt.xlabel(\"Avg Departure Delay (minutes)\", fontsize=16)\nplt.ylabel(\"Airport\",fontsize=16)\nplt.tight_layout()\nplt.savefig(\"Problem 5b.png\")\nplt.show()"
+  },
+  {
+    "objectID": "visualizations/visualizations.html#question-6",
+    "href": "visualizations/visualizations.html#question-6",
+    "title": "DSAN 6300 Mini Project Visualizations",
+    "section": "Question 6",
+    "text": "Question 6\nCheck if your dataset has any canceled flights. If it does, what was the most frequent reason for each departure airport? Output airport name, the most frequent reason, and the number of cancelations for that reason\n\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\n# Read CSV with single column: Cancelled_Flights\ndf = pd.read_csv(\"/Users/ishika/Desktop/MS/DSAN 6300/Mini Project/MiniProject/miniproject_ig294_problem6a.csv\")\n\n# Get the total number of cancelled flights (first row)\ncancelled_flights = df.loc[0, \"Cancelled_Flights\"]\n\nplt.figure(figsize=(8, 4))\nplt.axis('off')\n\n# KPI card background\nplt.gca().set_facecolor(\"#f7f7f7\")\nplt.gcf().patch.set_facecolor(\"#f7f7f7\")\n\n# Title\nplt.text(0.5, 0.8, \"Total Number of Cancelled Flights\",\n         ha='center', va='center', fontsize=18, fontweight='bold')\n\n# # Subtitle / context\n# plt.text(0.5, 0.58, \"Total number of cancelled flights\",\n#          ha='center', va='center', fontsize=14)\n\n# KPI Metric (big number)\nplt.text(0.5, 0.35, f\"{cancelled_flights:,}\",\n         ha='center', va='center', fontsize=32, color=\"red\", fontweight=\"bold\")\n\nplt.tight_layout()\nplt.savefig(\"Problem 6 KPI.png\")\nplt.show()\n\n# pie chart of cancellation reasons \nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load your cancellations CSV\ndf = pd.read_csv(\"/Users/ishika/Desktop/MS/DSAN 6300/Mini Project/MiniProject/miniproject_ig294_problem6b.csv\")\n\n# Group by cancellation reason\nreason_summary = df.groupby(\"Most_Frequent_Reason\")[\"Number_Of_Cancellations\"].sum()\n\n# Nice colors\ncolors = [\"#FF9999\", \"#66B2FF\", \"#99FF99\", \"#FFCC99\", \"#C2C2F0\"]\n\nplt.figure(figsize=(10, 7))\n\n# Custom autopct function to show % and raw count\ndef autopct_with_counts(pct):\n    total = reason_summary.sum()\n    count = int(round(pct * total / 100.0))\n    return f\"{pct:.1f}% ({count})\"\n\n# Pie chart\nplt.pie(\n    reason_summary,\n    labels=reason_summary.index,\n    autopct=autopct_with_counts,\n    startangle=140,\n    colors=colors,\n    textprops={'fontsize': 12}\n)\n\nplt.title(\"Breakdown of Cancellation Reasons Across Airports\", fontsize=16, fontweight=\"bold\")\nplt.tight_layout()\nplt.savefig(\"Problem 6 pie chart.png\")\nplt.show()\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load data\ndf = pd.read_csv(\"miniproject_ig294_problem6b.csv\")\n\n# Pivot: rows = airport, columns = reason, values = num cancellations\npivot = (\n    df.pivot_table(\n        index=\"Airport_Name\",\n        columns=\"Most_Frequent_Reason\",\n        values=\"Number_Of_Cancellations\",\n        aggfunc=\"sum\",\n        fill_value=0\n    )\n)\n\npivot[\"Total_Cancellations\"] = pivot.sum(axis=1)\npivot = pivot.sort_values(\"Total_Cancellations\", ascending=True)\npivot = pivot.drop(columns=\"Total_Cancellations\")\n\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\n# Load file\ndf = pd.read_csv(\"/Users/ishika/Desktop/MS/DSAN 6300/Mini Project/MiniProject/miniproject_ig294_problem6b.csv\")\n\n\n\ntop_airports = df.sort_values(\"Number_Of_Cancellations\", ascending=False).head(20)\n\n# --- Plot ---\nplt.figure(figsize=(12, 9))\nsns.barplot(\n    data=top_airports,\n    x=\"Number_Of_Cancellations\",\n    y=\"Airport_Name\",\n    hue=\"Most_Frequent_Reason\",\n    dodge=False,                   # ensures one bar per airport\n    palette=\"Set2\"\n)\n\nplt.title(\"Top 20 Airports by Most Frequent Cancellation Reason\", fontsize=16, fontweight=\"bold\")\nplt.xlabel(\"Number of Cancellations\")\nplt.ylabel(\"Airport\")\nplt.legend(title=\"Cancellation Reason\")\nplt.tight_layout()\nplt.savefig(\"Problem 6 bar chart.png\")\nplt.show()"
+  },
+  {
+    "objectID": "visualizations/visualizations.html#question-7",
+    "href": "visualizations/visualizations.html#question-7",
+    "title": "DSAN 6300 Mini Project Visualizations",
+    "section": "Question 7",
+    "text": "Question 7\nBuild a report that for each day output average number of flights over the preceding 3 days.\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\ndf = pd.read_csv(\"/Users/ishika/Desktop/MS/DSAN 6300/Mini Project/MiniProject/miniproject_ig294_problem7.csv\")\n\nplt.figure(figsize=(14,6))\n\n# Plot total flights\nplt.plot(df[\"FlightDate\"], df[\"Flights_Per_Day\"], \n         label=\"Flights Per Day\", marker=\"o\")\n\n# Plot rolling average (dashed orange)\nplt.plot(df[\"FlightDate\"], df[\"Avg_Flights_Preceding_3_Days\"], \n         label=\"3-Day Rolling Average\", marker=\"o\",\n         linewidth=3, linestyle=\"--\", color=\"orange\")\n\nplt.title(\"Daily Flights and 3-Day Rolling Average\", fontsize=16)\nplt.xlabel(\"Flight Date\", fontsize=16)\nplt.ylabel(\"Number of Flights\",fontsize=16)\n\n# Show every 5th tick on the x-axis\nplt.xticks(df[\"FlightDate\"][::5], rotation=45)\n\n\n# Max flights\nmax_idx = df[\"Flights_Per_Day\"].idxmax()\nplt.annotate(\n    f\"Max flights: {df['Flights_Per_Day'][max_idx]}\\n Occurred on a Sunday\",\n    xy=(df[\"FlightDate\"][max_idx], df[\"Flights_Per_Day\"][max_idx]),\n    xytext=(df[\"FlightDate\"][max_idx], df[\"Flights_Per_Day\"][max_idx] + 1500),\n    arrowprops=dict(arrowstyle=\"-&gt;\")\n)\n\n# Min flights\nmin_idx = df[\"Flights_Per_Day\"].idxmin()\nplt.annotate(\n    f\"Min flights: {df['Flights_Per_Day'][min_idx]}\\n Occurred on a Thursday\",\n    xy=(df[\"FlightDate\"][min_idx], df[\"Flights_Per_Day\"][min_idx]),\n    xytext=(df[\"FlightDate\"][min_idx], df[\"Flights_Per_Day\"][min_idx] + 2500),\n    arrowprops=dict(arrowstyle=\"-&gt;\")\n)\n\n\nplt.legend()\nplt.grid(True)\nplt.tight_layout()\nplt.savefig(\"Problem 7\")\nplt.show()"
+  },
+  {
+    "objectID": "website/story.html",
+    "href": "website/story.html",
+    "title": "Airline Performance in the United States of America: November 2023",
+    "section": "",
+    "text": "Air travel reliability is shaped by many interconnected forces: airline operations, airport congestion, staffing levels, seasonal demand patterns, and even weather.\nThis project examines U.S. airline performance during November 2023, a month marked by heavy travel activity around Thanksgiving. The analysis aims to understand how well the aviation system functioned under this pressure.\nThe goals of this exploration are to uncover:\n\nWhich airlines and airports are most prone to delays\n\nWhere early departures occur and why they matter\n\nHow flight volume varies throughout the week\n\nWhat drives cancellations across airports\n\nHow operational patterns evolve over the month\n\nTogether, these insights help illuminate how and why flight reliability fluctuates, revealing operational weaknesses and seasonal stress points across the U.S. air transportation system."
+  },
+  {
+    "objectID": "website/story.html#maximum-departure-delay-by-airline",
+    "href": "website/story.html#maximum-departure-delay-by-airline",
+    "title": "Airline Performance in the United States of America: November 2023",
+    "section": "2.1 Maximum Departure Delay by Airline",
+    "text": "2.1 Maximum Departure Delay by Airline\n\nAmerican Airlines experienced an extreme maximum delay of roughly 3,518 minutes (~58 hours), whereas Southwest Airlines recorded the lowest maximum delay at about 652 minutes.\nThis contrast highlights an important operational difference:\nLow-cost and regional carriers generally have tighter turnaround schedules and less buffer capacity, which means long delays are far more expensive for them. Every extra minute at the gate can disrupt their entire daily route structure, so they tend to avoid prolonged delays more aggressively.\nLarge legacy carriers like American Airlines, however, operate complex hub-and-spoke networks. When irregular operations occur (maintenance issues, missed crew connections, aircraft swaps), the ripple effects can accumulate and lead to much longer individual delays, even if such events are rare."
+  },
+  {
+    "objectID": "website/story.html#maximum-early-departures",
+    "href": "website/story.html#maximum-early-departures",
+    "title": "Airline Performance in the United States of America: November 2023",
+    "section": "2.2 Maximum Early Departures",
+    "text": "2.2 Maximum Early Departures\nEarly departures may seem harmless, but leaving too early can disrupt passenger connections and scheduling coordination. Comparing the worst early departures gives a sense of how strictly airlines adhere to scheduled departures.\n\nSkyWest shows the largest early departure at around 72 minutes early.\nEarly departures tend to cluster among regional and commuter airlines, which often operate tight schedules designed around larger hub connections.\nRegional carriers sometimes push departures early to maintain tight network timing, especially when feeding into major airline hubs. However, excessive earliness can inconvenience passengers arriving at the gate on time."
+  },
+  {
+    "objectID": "website/story.html#worst-airport-overall",
+    "href": "website/story.html#worst-airport-overall",
+    "title": "Airline Performance in the United States of America: November 2023",
+    "section": "4.1 Worst Airport Overall",
+    "text": "4.1 Worst Airport Overall\nSome airports create more delay risk than others. The KPI below highlights the single worst-performing airport in November 2023.\n\nConcord Padgett Regional shows an average departure delay of 74.19 minutes — significantly higher than most airports. Smaller regional airports may lack robust staffing, runway capacity, or scheduling flexibility, contributing disproportionately to delays."
+  },
+  {
+    "objectID": "website/story.html#worst-airport-for-each-airline",
+    "href": "website/story.html#worst-airport-for-each-airline",
+    "title": "Airline Performance in the United States of America: November 2023",
+    "section": "4.2 Worst Airport for Each Airline",
+    "text": "4.2 Worst Airport for Each Airline\nAfter identifying the airlines with the highest average delays, we then examined where those delays occur. Each airline has a unique “worst airport,” meaning the location where it experiences the highest average departure delay. These airports are not necessarily major hubs — many are mid-sized airports with limited infrastructure or seasonal congestion, which can create bottlenecks felt across several airlines.\n \nCommon high-delay locations include:\n\nPalm Springs International — Handles a large surge of seasonal traffic despite limited runway and gate capacity. Surrounded by mountains, the airport has restricted approach paths, and strong desert crosswinds frequently disrupt operations. These factors cause delays to pile up quickly.\nGainesville Regional — Has limited ground crew and gate availability, so even a single operational delay can cascade. As the primary airport for the University of Florida, Thanksgiving break creates a major travel spike that further strains capacity.\nRick Husband Amarillo International — Located in the Great Plains where strong winds and low visibility are common. The airport also serves regional carriers with tight turnaround schedules, so delays on inbound flights often roll into outbound departures.\nJuneau International — One of the most challenging airports in the U.S. due to mountainous terrain and complex approach routes. Winter weather in Alaska like fog, snowfall, and high winds is highly unpredictable in November, making delays almost inevitable.\n\nInterestingly, the airports with the highest delays for multiple airlines are not major hubs, but medium-sized or regional airports. These locations share common characteristics: challenging weather, limited infrastructure, or seasonal congestion. Together, these factors make them highly vulnerable to operational disruptions."
+  },
+  {
+    "objectID": "website/story.html#total-cancellations",
+    "href": "website/story.html#total-cancellations",
+    "title": "Airline Performance in the United States of America: November 2023",
+    "section": "5.1 Total Cancellations",
+    "text": "5.1 Total Cancellations\n\nThe dataset confirms 819 canceled flights during November."
+  },
+  {
+    "objectID": "website/story.html#why-do-airports-cancel-flights-most-frequent-reasons",
+    "href": "website/story.html#why-do-airports-cancel-flights-most-frequent-reasons",
+    "title": "Airline Performance in the United States of America: November 2023",
+    "section": "5.2 Why Do Airports Cancel Flights? Most Frequent Reasons",
+    "text": "5.2 Why Do Airports Cancel Flights? Most Frequent Reasons\n\nBreakdown:\n\n~72% caused by Carrier\n~27% caused by Weather\n&lt;1% caused by NAS (Air Traffic System)\n\nThis means that most cancellations stemmed from airline-controlled factors such as maintenance issues, staffing shortages, and aircraft routing problems.\n\nTop 20 Airports by Cancellation Reason\n\nAirports with the highest cancellations include:\n\nMcCarran International\n\nDaniel K. Inouye International\n\nOrlando International\n\nThese airports are major leisure destinations or are located in regions prone to seasonal weather issues.\nCarrier-related cancellations dominate the system. Weather plays a role but is not the main driver in November. This directly answers our question about which disruptions are within airline control versus external weather or air-traffic constraints."
+  },
+  {
+    "objectID": "website/index.html#project-objective",
+    "href": "website/index.html#project-objective",
+    "title": "Airline Performance Analysis",
+    "section": "Project Objective",
+    "text": "Project Objective\nThis project examines U.S. airline performance during November 2023, using data from the Bureau of Transportation Statistics. The goal is to evaluate how airlines and airports operated during the start of the busy holiday travel season—focusing on delays, cancellations, and day-to-day flight behavior."
+  },
+  {
+    "objectID": "website/index.html#key-questions",
+    "href": "website/index.html#key-questions",
+    "title": "Airline Performance Analysis",
+    "section": "Key Questions",
+    "text": "Key Questions\n\nWhich airlines and airports demonstrated the strongest reliability?\nWhere did delays or cancellations cluster, and which carriers were most affected?\nHow did broader operational patterns such as weekday demand or holiday travel surges—shape overall performance?"
+  },
+  {
+    "objectID": "website/index.html#author",
+    "href": "website/index.html#author",
+    "title": "Airline Performance Analysis",
+    "section": "Author",
+    "text": "Author\nIshika is a first-year Master’s student in Data Science and Analytics at Georgetown University. This project, completed for DSAN 6300 (Database Systems and SQL), analyzes U.S. airline performance during November 2023 using SQL-generated datasets from the Bureau of Transportation Statistics. All analysis was conducted in Python and presented through a Quarto website, with a narrative storyline designed to highlight key findings and insights. Her academic interests include data visualization, transportation analytics, and storytelling with data."
+  },
+  {
     "objectID": "index.html#project-objective",
     "href": "index.html#project-objective",
     "title": "Airline Performance Analysis",
